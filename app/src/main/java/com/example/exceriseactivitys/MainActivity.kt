@@ -2,6 +2,7 @@ package com.example.exceriseactivitys
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
@@ -12,15 +13,13 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             when (it.resultCode) {
                 4 -> {
-                    val intent = it.data
-                    intent?.let {
-                        editTextName.setText(intent.getStringExtra("KeyResultName"))
+                    it.data?.let { data->
+                        editTextName.setText(data.getStringExtra("KeyResultName"))
                     }
                 }
                 5 -> {
-                    val intent = it.data
-                    intent?.let {
-                        val year = intent.getIntExtra("KeyResultDate", 0).toString()
+                        it.data?.let {data->
+                        val year = data.getIntExtra("KeyResultDate", 0).toString()
                         editTextDate.setText(year)
                         val currentTime: Int = Calendar.getInstance().get(Calendar.YEAR)
                         editTextAge.setText((currentTime - year.toInt()).toString())
@@ -32,17 +31,16 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.i("TAG","")
     }
 
     override fun onResume() {
         super.onResume()
         buttonGetName.setOnClickListener {
-            val intent = Intent(this, NameActivity::class.java)
-            resultConstract.launch(intent)
+            resultConstract.launch( Intent(this, NameActivity::class.java))
         }
         buttonGetDate.setOnClickListener {
-            val intent = Intent(this, YearActivity::class.java)
-            resultConstract.launch(intent)
+            resultConstract.launch(Intent(this, YearActivity::class.java))
         }
     }
 }
